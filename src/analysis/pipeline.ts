@@ -20,6 +20,8 @@ export interface AnalyzeOptions {
   fileSize: number;
   data: ArrayBuffer | Uint8Array;
   password?: string;
+  /** Path/URL das fontes padrão do PDF.js (necessário em Node/CI). */
+  standardFontDataUrl?: string;
   onProgress?: ProgressCallback;
 }
 
@@ -28,7 +30,8 @@ export interface AnalyzeOptions {
  * Processa páginas sequencialmente para limitar uso de memória.
  */
 export async function analyzePdf(options: AnalyzeOptions): Promise<AnalysisReport> {
-  const { fileName, fileSize, data, password, onProgress } = options;
+  const { fileName, fileSize, data, password, standardFontDataUrl, onProgress } =
+    options;
 
   const reportProgress = (partial: Partial<AnalysisProgress> & Pick<AnalysisProgress, 'phase' | 'message'>) => {
     onProgress?.({
@@ -43,7 +46,7 @@ export async function analyzePdf(options: AnalyzeOptions): Promise<AnalysisRepor
   let document: PDFDocumentProxy | null = null;
 
   try {
-    const loaded = await loadPdf(data, password);
+    const loaded = await loadPdf(data, { password, standardFontDataUrl });
     document = loaded.document;
     const pageCount = loaded.pageCount;
 

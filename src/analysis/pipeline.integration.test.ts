@@ -12,10 +12,14 @@ const fixturesDir = path.resolve(
   '../../fixtures',
 );
 
+const pdfjsRoot = path.dirname(require.resolve('pdfjs-dist/package.json'));
+const standardFontDataUrl = `${pathToFileURL(path.join(pdfjsRoot, 'standard_fonts')).href}/`;
+const workerSrc = pathToFileURL(
+  require.resolve('pdfjs-dist/build/pdf.worker.mjs'),
+).href;
+
 beforeAll(() => {
-  GlobalWorkerOptions.workerSrc = pathToFileURL(
-    require.resolve('pdfjs-dist/build/pdf.worker.min.mjs'),
-  ).href;
+  GlobalWorkerOptions.workerSrc = workerSrc;
 });
 
 async function analyzeFixture(name: string) {
@@ -25,6 +29,7 @@ async function analyzeFixture(name: string) {
     fileName: name,
     fileSize: data.byteLength,
     data: new Uint8Array(data),
+    standardFontDataUrl,
   });
 }
 
@@ -37,25 +42,25 @@ describe('analyzePdf fixtures', () => {
         (f) => f.category === 'low_contrast' || f.category === 'prompt_injection',
       ),
     ).toBe(true);
-  }, 60_000);
+  }, 30_000);
 
   it('detecta Tr 3 em tr3-invisible.pdf', async () => {
     const report = await analyzeFixture('tr3-invisible.pdf');
     expect(
       report.findings.some((f) => f.category === 'invisible_text_mode'),
     ).toBe(true);
-  }, 60_000);
+  }, 30_000);
 
   it('não inventa achados críticos em clean.pdf', async () => {
     const report = await analyzeFixture('clean.pdf');
     expect(report.findings.some((f) => f.severity === 'critical')).toBe(false);
     expect(report.disclaimer.length).toBeGreaterThan(10);
-  }, 60_000);
+  }, 30_000);
 
   it('detecta injection em metadados', async () => {
     const report = await analyzeFixture('metadata-injection.pdf');
     expect(report.findings.some((f) => f.category === 'metadata')).toBe(true);
-  }, 60_000);
+  }, 30_000);
 
   it('analisa feira-da-fruta.pdf com ocultações e injections', async () => {
     const report = await analyzeFixture('feira-da-fruta.pdf');
@@ -72,5 +77,5 @@ describe('analyzePdf fixtures', () => {
     ).toBe(true);
     const joined = report.findings.map((f) => f.text).join(' ');
     expect(/banana|laranja|goiaba|mamao|manga|abacaxi/i.test(joined)).toBe(true);
-  }, 60_000);
+  }, 30_000);
 });

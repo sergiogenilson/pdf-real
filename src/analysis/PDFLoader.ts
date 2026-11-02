@@ -41,25 +41,43 @@ export interface LoadedDocument {
   fingerprint: string;
 }
 
+export interface LoadPdfOptions {
+  password?: string;
+  /** Sobrescreve a URL das fontes padrão (útil em Node/CI). */
+  standardFontDataUrl?: string;
+}
+
 /**
  * Carrega um PDF a partir de ArrayBuffer/Uint8Array no navegador.
  * Não transmite dados para servidores externos.
  */
 export async function loadPdf(
   data: ArrayBuffer | Uint8Array,
-  password?: string,
+  passwordOrOptions?: string | LoadPdfOptions,
 ): Promise<LoadedDocument> {
   configurePdfWorker();
+
+  const options: LoadPdfOptions =
+    typeof passwordOrOptions === 'string'
+      ? { password: passwordOrOptions }
+      : (passwordOrOptions ?? {});
+
+  // No browser usa public/standard_fonts; em Node/CI o caller deve passar o path do pacote
+  // (evitar fetch em "/standard_fonts/", que pode travar o getDocument).
+  const standardFontDataUrl =
+    options.standardFontDataUrl ??
+    (typeof document !== 'undefined'
+      ? `${import.meta.env.BASE_URL ?? '/'}standard_fonts/`
+      : undefined);
 
   try {
     const task = getDocument({
       data: data instanceof Uint8Array ? data : new Uint8Array(data),
-      password,
+      password: options.password,
       useSystemFonts: true,
       disableAutoFetch: false,
       disableStream: false,
-      // Servido a partir de public/standard_fonts (compatível com base path do Pages).
-      standardFontDataUrl: `${import.meta.env.BASE_URL ?? '/'}standard_fonts/`,
+      ...(standardFontDataUrl ? { standardFontDataUrl } : {}),
     });
 
     const document = await task.promise;

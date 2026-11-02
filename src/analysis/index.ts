@@ -1,5 +1,5 @@
 export { configurePdfWorker, destroyPdf, loadPdf, PdfLoadError } from './PDFLoader';
-export type { LoadErrorCode, LoadedDocument } from './PDFLoader';
+export type { LoadErrorCode, LoadedDocument, LoadPdfOptions } from './PDFLoader';
 export { PDFRenderer } from './PDFRenderer';
 export type { PageMetrics, RenderPageOptions } from './PDFRenderer';
 export { extractPageText } from './TextExtractor';

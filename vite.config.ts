@@ -17,6 +17,9 @@ export default defineConfig({
   test: {
     environment: 'node',
     include: ['src/**/*.test.ts'],
-    pool: 'threads',
+    // forks evita hang do worker do PDF.js no pool de threads (CI GitHub Actions)
+    pool: 'forks',
+    fileParallelism: false,
+    testTimeout: 30_000,
   },
 });
