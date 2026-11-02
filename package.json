@@ -9,6 +9,7 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest run",
+    "test:unit": "vitest run --exclude src/**/*.integration.test.ts",
     "test:watch": "vitest",
     "fixtures": "node scripts/generate-fixtures.mjs",
     "feira": "node scripts/generate-feira-da-fruta.mjs"

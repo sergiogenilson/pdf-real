@@ -42,11 +42,14 @@ npm run dev
 | Comando | Descrição |
 | --- | --- |
 | `npm run dev` | Servidor de desenvolvimento |
-| `npm test` | Testes unitários |
+| `npm test` | Todos os testes (unitários + integração PDF.js) |
+| `npm run test:unit` | Só unitários (usado no GitHub Actions) |
 | `npm run build` | Build de produção |
 | `npm run preview` | Preview do build |
 | `npm run fixtures` | Gera PDFs de teste em `fixtures/` |
 | `npm run feira` | Gera o PDF de demonstração `feira-da-fruta.pdf` |
+
+> No GitHub Actions roda apenas `npm run test:unit`. Os testes de integração com PDF.js (`*.integration.test.ts`) tendem a travar no runner e devem ser executados localmente com `npm test`.
 
 ## Documento de teste: Feira da Fruta
 
