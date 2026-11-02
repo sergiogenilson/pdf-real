@@ -1,0 +1,67 @@
+:root {
+  --bg: #e4e9ef;
+  --bg-accent: #d5dee8;
+  --ink: #101820;
+  --ink-muted: #4a5a6a;
+  --surface: #f7f9fb;
+  --surface-solid: #ffffff;
+  --line: rgba(16, 24, 32, 0.12);
+  --forest: #0b6e4f;
+  --forest-soft: #d8f0e6;
+  --alert: #c23b22;
+  --alert-soft: #fde8e4;
+  --warn: #b86e00;
+  --warn-soft: #fff1d6;
+  --reveal: #ff6b35;
+  --reveal-soft: #ffe6dc;
+  --critical: #7a1020;
+  --shadow: 0 18px 50px rgba(16, 24, 32, 0.12);
+  --radius: 14px;
+  --font-display: 'Space Grotesk', 'Avenir Next', sans-serif;
+  --font-body: 'Literata', 'Iowan Old Style', Georgia, serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  color: var(--ink);
+  background: var(--bg);
+  font-family: var(--font-body);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(11, 110, 79, 0.12), transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, rgba(255, 107, 53, 0.1), transparent 50%),
+    linear-gradient(165deg, var(--bg) 0%, var(--bg-accent) 100%);
+  background-attachment: fixed;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: var(--forest);
+}
+
+::selection {
+  background: rgba(11, 110, 79, 0.2);
+}
